@@ -1,9 +1,11 @@
 package view;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,7 +27,6 @@ public class SelezionaPartecipanti extends JFrame{
 		setLocationRelativeTo(null); // farla comparire al centro
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // l'applicazione si chiude quando premi la "X"
 		setVisible(true); // finestra visibile, da mettere alla fine dopo aver impostato la finestra
-		
 	}
 
 }
@@ -62,6 +63,7 @@ class SceltaIniziale extends JPanel implements ActionListener {
 		JButton premuto = (JButton) azione;
 		if(premuto == bottone2giocatori) {
 			new FrameDuo();
+			SwingUtilities.getWindowAncestor(this).setVisible(false);
 		} else if(premuto == bottone4giocatori){
 			new FrameSquad();
 		}

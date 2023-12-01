@@ -38,7 +38,7 @@ class SceltaIniziale extends JPanel implements ActionListener {
 	
 	public SceltaIniziale() {
 		
-		labelBenvenuto = new JLabel("Benvenuto, in quanti siete a giocare?");
+		labelBenvenuto = new JLabel("Benvenuto, seleziona partecipanti");
 		bottone2giocatori = new JButton("2 Giocatori");
 		bottone4giocatori = new JButton("4 Giocatori");
 		

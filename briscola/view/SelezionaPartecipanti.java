@@ -1,15 +1,14 @@
 package view;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.awt.*;
 
 public class SelezionaPartecipanti extends JFrame{
@@ -36,13 +35,18 @@ class SceltaIniziale extends JPanel implements ActionListener {
 	private JButton bottone2giocatori;
 	private JButton bottone4giocatori;
 	private JLabel labelBenvenuto;
-	
+	private JTextField nome;
+	private JButton salvanome;
+	private JLabel inserisci;
+
 	public SceltaIniziale() {
 		
 		labelBenvenuto = new JLabel("Benvenuto, seleziona partecipanti");
 		bottone2giocatori = new JButton("2 Giocatori");
 		bottone4giocatori = new JButton("4 Giocatori");
-		
+		salvanome = new JButton("Salva");
+		inserisci = new JLabel("Inserisci nome");
+
 		bottone2giocatori.setPreferredSize(new Dimension(200,50));
 		bottone4giocatori.setPreferredSize(new Dimension(200,50));
 
@@ -60,6 +64,7 @@ class SceltaIniziale extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object azione = e.getSource(); // torna l'oggetto in cui � avvenuta l'azione
+		String nick = null;
 		JButton premuto = (JButton) azione;
 		if(premuto == bottone2giocatori) {
 			new FrameDuo();

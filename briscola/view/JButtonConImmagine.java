@@ -12,11 +12,22 @@ public class JButtonConImmagine extends JButton {
 
     private BufferedImage sfondo;
 
-    public JButtonConImmagine(String testo, String percorsoImmagine) {
-        super(testo);
-
+    public JButtonConImmagine(){
+        
+    }
+    
+    public JButtonConImmagine(String percorsoImmagine) {
         try {
             this.sfondo = ImageIO.read(new File(percorsoImmagine));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void impostaImmagine(String percorsoImmagine) {
+        try {
+            this.sfondo = ImageIO.read(new File(percorsoImmagine));
+            repaint(); // Ridisegna il componente per riflettere il cambio di immagine
         } catch (IOException e) {
             e.printStackTrace();
         }

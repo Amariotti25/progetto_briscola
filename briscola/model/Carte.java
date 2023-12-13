@@ -37,25 +37,33 @@ public class Carte {
                 return this.seme + " " + String.valueOf(numero);
             }
         
-            public int compareTo(Carte carta, String seme, String briscola){ 
-                if((this.seme.equals(briscola))&&(!carta.seme.equals(briscola)))
+            public int compareTo(Carte carta, String seme, String briscola) {
+                // Controllo se la carta corrente e la carta avversaria sono della briscola
+                boolean isBriscolaCorrente = this.seme.equals(briscola);
+                boolean isBriscolaAvversaria = carta.seme.equals(briscola);
+            
+                // Controllo se la carta corrente e la carta avversaria sono della stessa mossa
+                boolean isStessaMossaCorrente = this.seme.equals(seme);
+                boolean isStessaMossaAvversaria = carta.seme.equals(seme);
+            
+                // Comparazione in base alla briscola e alla mossa corrente
+                if (isBriscolaCorrente && !isBriscolaAvversaria) {
                     return 1;
-                if(this.seme.equals(seme)&&(!carta.seme.equals(briscola)&&!(carta.seme.equals(seme))))
+                } else if (isStessaMossaCorrente && !isStessaMossaAvversaria) {
                     return 1;
-                if((this.seme.equals(briscola)&&(carta.seme.equals(briscola))||(this.seme.equals(seme)&&carta.seme.equals(seme)))){
-                    if(this.valore==carta.valore)
-                        if(this.numero>carta.numero)
-                            return 1;
-                        else 
-                            return -1;
-                    else
-                        if(this.valore>carta.valore)
-                            return 1;
-                        else
-                            return -1;
+                } else if (isBriscolaAvversaria && !isBriscolaCorrente) {
+                    return -1;
+                } else if (isStessaMossaAvversaria && !isStessaMossaCorrente) {
+                    return -1;
+                } else {
+                    // Se le carte non sono né della briscola né della stessa mossa, confronta i valori
+                    if (this.valore == carta.valore) {
+                        return Integer.compare(this.numero, carta.numero);
+                    } else {
+                        return Integer.compare(this.valore, carta.valore);
+                    }
                 }
-                return -1;
-            }
+            }            
         
             public Giocatore getPlayer(){
                 return this.giocatore;
@@ -63,6 +71,10 @@ public class Carte {
         
             public String getSeme(){
                 return this.seme;
+            }
+
+            public int getNumero(){
+                return this.numero;
             }
         
         }

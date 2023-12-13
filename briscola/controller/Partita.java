@@ -3,29 +3,49 @@ package controller;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
-import java.util.Scanner;
+
+import javax.swing.SwingWorker;
 
 import model.Carte;
 import model.Giocatore;
 import model.Mazzo;
+import view.Tavolo;
 
-public class Partita {
-	//costanti
-	private final String nomePlayer1 = "bianco";
-	private final String nomePlayer2 = "grigio";
+public class Partita extends SwingWorker <Void, Void>{
+
+	private final String nomePlayer1 ;
+	private final String nomePlayer2 ;
+
+	private Tavolo gioco;
+	private int sceltaUtente;
+	private LinkedList<Carte> carteDisp;
 	
 
 	private ArrayList<Carte> mazzoPlayer1 = new ArrayList<>();
 	private ArrayList<Carte> mazzoPlayer2 = new ArrayList<>();
 	
-	private Giocatore player1; 
-	private Giocatore player2;
+	public Giocatore player1; 
+	public Giocatore player2;
+	private Giocatore attuale;
 	private String turnoPlayerAttuale; 
 	private boolean isStoppable = false;
 	private Carte ultimaCartaGiocata = null;
-	private Scanner scanner = new Scanner(System.in);
 	
-	public Partita() {
+	public Partita(String nome, String nome2,Tavolo game) {
+		this.gioco = game;
+		this.sceltaUtente = 0;
+
+		this.nomePlayer1 = nome;
+		this.nomePlayer2 = nome2;
+	}
+
+	@Override
+	protected Void doInBackground() throws Exception {
+        startGame();
+        return null;
+    }
+
+	private void startGame(){
 		Mazzo mazzo = new Mazzo(true);
 		LinkedList<Carte> listaCarte = mazzo.getListaCarte();
 		ListIterator<Carte> it1 = listaCarte.listIterator();
@@ -129,19 +149,20 @@ public class Partita {
 			System.out.println("Pareggio");
 			isStoppable = true;
 		}
+		gioco.notificaFineGioco();
 	}
 	
 	public Carte mossa(Giocatore playerAttuale, Carte briscola, int indiceScorrimento) {
+		this.attuale =playerAttuale;
 		System.out.println("È il turno di " + playerAttuale.getNome() + "!");
 		System.out.println("Scegli una carta dal mazzo! [1], [2], [3] ");
 		LinkedList<Carte> carteDisponibili = playerAttuale.getCarteDisponibili();
 		System.out.print(carteDisponibili + "  ");
 		
-		int indiceMossa = prelevaMossa();
+		int indiceMossa = mossaScelta();
 		//controllo se l'indice è valido
 		while(indiceMossa < 1 || indiceMossa > 3) {
-			System.out.println("Mossa non valida, inserire il numero [1], [2] oppure [3]!  ");
-			indiceMossa = prelevaMossa();
+			indiceMossa = mossaScelta();
 		}
 		indiceMossa--;
 
@@ -153,9 +174,15 @@ public class Partita {
 		return daRestituire;
 	}
 
+	public synchronized int mossaScelta() {
+		attesaScelta();
+        return getSceltaUtente();
+    }
+
 	public Carte mossaUltimoTurn(Giocatore playerAttuale){
 
 		//Numero carte Rimaste
+		this.attuale = playerAttuale;
 		int numeroCarteRimaste = playerAttuale.getCarteDisponibili().size();
 		System.out.println("È il turno di " + playerAttuale.getNome() + "!");
 		if(numeroCarteRimaste==3)
@@ -170,11 +197,10 @@ public class Partita {
 		LinkedList<Carte> carteDisponibili = playerAttuale.getCarteDisponibili();
 		System.out.print(carteDisponibili + "  ");
 		
-		int indiceMossa = prelevaMossa();
+		int indiceMossa = mossaScelta();
 		//controllo se l'indice è valido
 		while(((numeroCarteRimaste==3)&&(indiceMossa < 1 || indiceMossa > 3))||((numeroCarteRimaste==2)&&(indiceMossa<1||indiceMossa>2))||((numeroCarteRimaste==1)&&(indiceMossa!=1))) {
-			System.out.println("Mossa non valida, inserire il numero [1], [2] oppure [3]!  ");
-			indiceMossa = prelevaMossa();
+			indiceMossa = mossaScelta();
 		}
 		indiceMossa--;
 
@@ -183,15 +209,6 @@ public class Partita {
 		Carte cartaRet = carteDisponibili.get(indiceMossa);
 	eliminaCarta(playerAttuale,indiceMossa);
 		return cartaRet;
-	}
-
-	public int prelevaMossa() {
-		
-		int i = -1;
-		if(scanner.hasNextInt()) {
-			i = scanner.nextInt();
-		}
-		return i;
 	}
 
 	public boolean controllaGameOver() {
@@ -204,6 +221,35 @@ public class Partita {
 
 	public void eliminaCarta(Giocatore playerAttuale,int indiceMossa){
 		playerAttuale.getCarteDisponibili().remove(indiceMossa);
+	}
+
+	public void attesaScelta() {
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+    public void notificaScelta() {
+		notifyAll();
+	}
+
+    public void setGioco(Tavolo gioco) {
+        this.gioco = gioco;
+    }
+
+	public int getSceltaUtente() {
+		return sceltaUtente;
+	}
+
+    public synchronized void setSceltaUtente(int scelta) {
+		this.sceltaUtente = scelta;
+		notificaScelta();
+	}
+
+	public LinkedList<Carte> getCarteDisp (){
+		return carteDisp = this.attuale.getCarteDisponibili();
 	}
     
 }

@@ -24,13 +24,15 @@ public class Partita extends SwingWorker <Void, Void>{
 	private ArrayList<Carte> mazzoPlayer1 = new ArrayList<>();
 	private ArrayList<Carte> mazzoPlayer2 = new ArrayList<>();
 	
+	private Giocatore giocatoreVincente;
 	public Giocatore player1; 
 	public Giocatore player2;
 	private Giocatore attuale;
 	private String turnoPlayerAttuale; 
 	private boolean isStoppable = false;
 	private Carte ultimaCartaGiocata = null;
-	
+	private Mazzo mazzo;
+
 	public Partita(String nome, String nome2,Tavolo game) {
 		this.gioco = game;
 		this.sceltaUtente = 0;
@@ -45,107 +47,90 @@ public class Partita extends SwingWorker <Void, Void>{
         return null;
     }
 
-	private void startGame(){
+	private void startGame() {
 		Mazzo mazzo = new Mazzo(true);
 		LinkedList<Carte> listaCarte = mazzo.getListaCarte();
 		ListIterator<Carte> it1 = listaCarte.listIterator();
-		
-		//Assegnamento delle carte ai giocatori
-		for(int i = 1; i<= 20; i++) 
+	
+		// Assegnamento delle carte ai giocatori
+		for (int i = 1; i <= 20; i++)
 			mazzoPlayer1.add(it1.next());
-		
-		for(int i = 21; i<=40; i++) 
+	
+		for (int i = 21; i <= 40; i++)
 			mazzoPlayer2.add(it1.next());
-
-		
+	
 		player1 = new Giocatore(nomePlayer1, mazzoPlayer1);
 		player2 = new Giocatore(nomePlayer2, mazzoPlayer2);
 		this.turnoPlayerAttuale = player1.getNome();
 		Carte briscola = mazzo.getListaCarte().getLast();
-
-		int i=2;
-		
-		while(i<=18){
-			
-			Carte carta1 = null; //Carta player1
-			Carte carta2 = null; //Carta player2
-			String semeMossa = null;
-			System.out.println("\nLa briscola è: " + briscola);
-			if(turnoPlayerAttuale.equals(player1.getNome())) {
+	
+		for (int i = 2; i <= 18; i++) {  // Aggiunta di questa riga
+			Carte carta1, carta2;
+			System.out.println("la briscola è: " + briscola);
+	
+			if (turnoPlayerAttuale.equals(player1.getNome())) {
 				ultimaCartaGiocata = null;
 				System.out.println("\nUltima carta giocata: " + ultimaCartaGiocata);
-				carta1 = mossa(player1,briscola, i);
-				ultimaCartaGiocata=carta1;//Serve per il messaggio da console
-				semeMossa = carta1.getSeme();
+				carta1 = mossa(player1, briscola, i);
+				ultimaCartaGiocata = carta1; // Serve per il messaggio da console
 				System.out.println("\nUltima carta giocata: " + ultimaCartaGiocata);
-				carta2 = mossa(player2,briscola, i);
-				
-			}
-			else { 
+				carta2 = mossa(player2, briscola, i);
+	
+			} else {
 				ultimaCartaGiocata = null;
 				System.out.println("\nUltima carta giocata: " + ultimaCartaGiocata);
-				carta2 = mossa(player2,briscola, i);
-				ultimaCartaGiocata=carta2;//Serve per il messaggio da console
-				semeMossa = carta2.getSeme();
-				System.out.println("\nUltima carta giocata: " + ultimaCartaGiocata);
-				carta1 = mossa(player1,briscola, i);
+				carta2 = mossa(player2, briscola, i);
+				ultimaCartaGiocata = carta2; // Serve per il messaggio da console
+				carta1 = mossa(player1, briscola, i);
 			}
-			
-			if(carta1.compareTo(carta2,semeMossa,briscola.getSeme())==1){
-				turnoPlayerAttuale=player1.getNome();
-				player1.setPunteggio(player1.getPunteggio()+carta1.getValore()+carta2.getValore());
+	
+			if (carta1.compareTo(carta2, briscola.getSeme(), briscola.getSeme()) == 1) {
+				giocatoreVincente = player1;
+				turnoPlayerAttuale = player1.getNome();
+				player1.setPunteggio(player1.getPunteggio() + carta1.getValore() + carta2.getValore());
+			} else {
+				giocatoreVincente = player2;
+				turnoPlayerAttuale = player2.getNome();
+				player2.setPunteggio(player2.getPunteggio() + carta1.getValore() + carta2.getValore());
 			}
-			else{
-				turnoPlayerAttuale=player2.getNome();
-				player2.setPunteggio(player2.getPunteggio()+carta1.getValore()+carta2.getValore());
-			}
-			i++;
 		}
-
-		
-
-		for(int j = 1;j<=3;j++){
-			Carte carta1 = null; //Carta player1
-			Carte carta2 = null; //Carta player2
-			String semeMossa = null;
-
-			if(turnoPlayerAttuale.equals(player1.getNome())) {
+	
+		// Rimane invariato fino alla fine del gioco
+		for (int j = 1; j <= 3; j++) {
+			Carte carta1, carta2;
+	
+			if (turnoPlayerAttuale.equals(player1.getNome())) {
 				System.out.println("\nUltima carta giocata: " + ultimaCartaGiocata);
 				carta1 = mossaUltimoTurn(player1);
-				semeMossa = carta1.getSeme();
+				carta2 = mossaUltimoTurn(player2);
+	
+			} else {
 				System.out.println("\nUltima carta giocata: " + ultimaCartaGiocata);
 				carta2 = mossaUltimoTurn(player2);
-				
-			}
-			else { 
-				System.out.println("\nUltima carta giocata: " + ultimaCartaGiocata);
-				carta2 = mossaUltimoTurn(player2);
-				semeMossa = carta2.getSeme();
-				System.out.println("\nUltima carta giocata: " + ultimaCartaGiocata);
 				carta1 = mossaUltimoTurn(player1);
 			}
-			
-			if(carta1.compareTo(carta2,semeMossa,briscola.getSeme())==1){
-				turnoPlayerAttuale=player1.getNome();
-				player1.setPunteggio(player1.getPunteggio()+carta1.getValore()+carta2.getValore());
+	
+			if (carta1.compareTo(carta2, briscola.getSeme(), briscola.getSeme()) == 1) {
+				giocatoreVincente = player1;
+				turnoPlayerAttuale = player1.getNome();
+				player1.setPunteggio(player1.getPunteggio() + carta1.getValore() + carta2.getValore());
+			} else {
+				giocatoreVincente = player2;
+				turnoPlayerAttuale = player2.getNome();
+				player2.setPunteggio(player2.getPunteggio() + carta1.getValore() + carta2.getValore());
 			}
-			else{
-				turnoPlayerAttuale=player2.getNome();
-				player2.setPunteggio(player2.getPunteggio()+carta1.getValore()+carta2.getValore());
-			}
 		}
-
-		System.out.println("Punteggio di bianco: " + player1.getPunteggio() + "\n Punteggio di grigio: " + player2.getPunteggio());
-		if(player1.getPunteggio()>player2.getPunteggio()) {
-			System.out.println("Vince: "+player1.getNome());
+	
+		System.out.println("Punteggio di bianco: " + player1.getPunteggio() + "\n Punteggio di grigio: "
+				+ player2.getPunteggio());
+		if (player1.getPunteggio() > player2.getPunteggio()) {
+			System.out.println("Vince: " + player1.getNome());
 			isStoppable = true;
-
-		}
-		else if(player2.getPunteggio()>player1.getPunteggio()) {
-			System.out.println("Vince: "+player2.getNome());
+	
+		} else if (player2.getPunteggio() > player1.getPunteggio()) {
+			System.out.println("Vince: " + player2.getNome());
 			isStoppable = true;
-		}
-		else {
+		} else {
 			System.out.println("Pareggio");
 			isStoppable = true;
 		}
@@ -252,4 +237,11 @@ public class Partita extends SwingWorker <Void, Void>{
 		return carteDisp = this.attuale.getCarteDisponibili();
 	}
     
+	public Carte getBriscola(){
+		return this.mazzo.getListaCarte().getLast();
+	}
+
+	public Carte getcartasultavolo(){
+		return this.ultimaCartaGiocata;
+	}
 }

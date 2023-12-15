@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -17,34 +18,48 @@ public class Tavolo extends JPanel implements ActionListener {
 	private String giocatore1;
 	private String giocatore2;
 	private Partita game;
-    public int scelta;
-	public JButtonConImmagine primaCarta;
-	public JButtonConImmagine secondaCarta;
-	public JButtonConImmagine terzaCarta;
+	private JButtonConImmagine primaCarta;
+	private JButtonConImmagine secondaCarta;
+	private JButtonConImmagine terzaCarta;
+	private JLabelConImmagine briscola;
+	private JLabelConImmagine cartasultavolo;
+	private JLabelConImmagine cartacoperta1;
+	private JLabelConImmagine cartacoperta2;
+	private JLabelConImmagine cartacoperta3;
 	private JLabel timerGiocatore;
 	private JButton indietro;
 	private JLabel labelSelezione;
 	
-	public Tavolo(String nomeGiocatore, String nomeGiocatore2) { 
+	public Tavolo(String nomeGiocatore, String nomeGiocatore2) {
+		this.setBackground(Color.green); 
 		this.giocatore1 = nomeGiocatore;
 		this.giocatore2 = nomeGiocatore2;
-        this.scelta = 0;
-
+        
 		labelSelezione = new JLabel("Seleziona una carta");
 		primaCarta = new JButtonConImmagine();
 		secondaCarta = new JButtonConImmagine();
 		terzaCarta = new JButtonConImmagine();
 		timerGiocatore = new JLabel();
+		briscola = new JLabelConImmagine();
+		cartasultavolo = new JLabelConImmagine();
+		cartacoperta1 = new JLabelConImmagine("../progetto_briscola/briscola/immagini/dorso.jpg");
+		cartacoperta2 = new JLabelConImmagine("../progetto_briscola/briscola/immagini/dorso.jpg");
+		cartacoperta3 = new JLabelConImmagine("../progetto_briscola/briscola/immagini/dorso.jpg");
 		indietro = new JButton("Esci dalla Partita");
-
-
-		primaCarta.setPreferredSize(new Dimension(110,202));
-		secondaCarta.setPreferredSize(new Dimension(110,202));
-		terzaCarta.setPreferredSize(new Dimension(110,202));
-		timerGiocatore.setPreferredSize(new Dimension(200,50));
-		indietro.setPreferredSize(new Dimension(200,50));
-
-		setLayout(new FlowLayout(FlowLayout.CENTER));
+		
+		setLayout(null);
+		
+		cartacoperta1.setBounds(5,5,110,202);
+		cartacoperta2.setBounds(120,5,110,202);
+		cartacoperta3.setBounds(235,5,110,202);
+		indietro.setBounds(350,5,150,50);
+		briscola.setBounds(5,213,110,202);
+		cartasultavolo.setBounds(190,213,110,202);
+		labelSelezione.setBounds(5,420,150,50);
+		primaCarta.setBounds(5,475,110,202);
+		secondaCarta.setBounds(120,475,110,202);
+		terzaCarta.setBounds(235,475,110,202);
+		timerGiocatore.setBounds(420,100,150,50);
 
 		add(labelSelezione);
 		add(primaCarta);
@@ -52,6 +67,11 @@ public class Tavolo extends JPanel implements ActionListener {
 		add(terzaCarta);
 		add(indietro);
 		add(timerGiocatore);
+		add(briscola);
+		add(cartasultavolo);
+		add(cartacoperta1);
+		add(cartacoperta2);
+		add(cartacoperta3);
 		timerGiocatore.setVisible(false);
 
 		primaCarta.addActionListener(this);
@@ -69,7 +89,10 @@ public class Tavolo extends JPanel implements ActionListener {
 																				+game.getCarteDisp().get(1).getNumero()+".jpg");
 			terzaCarta.impostaImmagine("../progetto_briscola/briscola/immagini/"+game.getCarteDisp().get(2).getSeme()
 																				+game.getCarteDisp().get(2).getNumero()+".jpg");
-        });
+			briscola.impostaImmagine("../progetto_briscola/briscola/immagini/"+game.getBriscola().getSeme()
+																			  +game.getBriscola().getNumero()+".jpg");
+		
+		});
 	}
 
 	public void notificaFineGioco() {

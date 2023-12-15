@@ -22,7 +22,7 @@ public class SelezionaPartecipanti extends JFrame{
 		
 		add(start, BorderLayout.CENTER);
 		
-		setSize(350, 200); // size della finestra
+		setSize(500,400); // size della finestra
 		setLocationRelativeTo(null); // farla comparire al centro
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // l'applicazione si chiude quando premi la "X"
 		setVisible(true); // finestra visibile, da mettere alla fine dopo aver impostato la finestra
@@ -32,8 +32,8 @@ public class SelezionaPartecipanti extends JFrame{
 
 class SceltaIniziale extends JPanel implements ActionListener {
 	
-	private JButton bottone2giocatori;
-	private JButton bottone4giocatori;
+	private JButton avvia;
+	private JButton chiudi;
 	private JLabel labelBenvenuto;
 	private JTextField nome;
 	private JTextField nome2;
@@ -43,22 +43,22 @@ class SceltaIniziale extends JPanel implements ActionListener {
 	public SceltaIniziale() {
 
 		labelBenvenuto = new JLabel("Benvenuto, seleziona partecipanti");
-		bottone2giocatori = new JButton("2 Giocatori");
-		bottone4giocatori = new JButton("4 Giocatori");
+		avvia = new JButton("Avvia Partita");
+		chiudi = new JButton("Chiudi il Gioco");
 		salvanome = new JButton("Salva");
 
-		bottone2giocatori.setPreferredSize(new Dimension(200,50));
-		bottone4giocatori.setPreferredSize(new Dimension(200,50));
+		avvia.setPreferredSize(new Dimension(200,50));
+		chiudi.setPreferredSize(new Dimension(200,50));
 
 		setLayout(new FlowLayout(FlowLayout.CENTER));
 		
 		add(labelBenvenuto);
-		add(bottone2giocatori);
-		add(bottone4giocatori);
+		add(avvia);
+		add(chiudi);
 		add(salvanome);
 
-		bottone2giocatori.addActionListener(this);
-		bottone4giocatori.addActionListener(this);
+		avvia.addActionListener(this);
+		chiudi.addActionListener(this);
 		salvanome.addActionListener(this);
 
 		salvanome.setVisible(false);
@@ -71,9 +71,9 @@ class SceltaIniziale extends JPanel implements ActionListener {
 		JButton premuto = (JButton) azione;
 		String nick;
 		String nick2;
-		if(premuto == bottone2giocatori) {
-			bottone2giocatori.setVisible(false);
-			bottone4giocatori.setVisible(false);
+		if(premuto == avvia) {
+			avvia.setVisible(false);
+			chiudi.setVisible(false);
 			labelBenvenuto.setVisible(false);
 			inserisci = new JLabel("Inserisci nome del primo giocatore");
 			add(inserisci);
@@ -96,8 +96,8 @@ class SceltaIniziale extends JPanel implements ActionListener {
 			nick2 = nome2.getText();
 			new FrameDuo(nick,nick2);
 			SwingUtilities.getWindowAncestor(this).setVisible(false);	
-		} else if(premuto == bottone4giocatori){
-			new FrameSquad();
+		} else if(premuto == chiudi){
+			System.exit(0);
 		}
 	}
 }

@@ -22,7 +22,7 @@ public class SelezionaPartecipanti extends JFrame{
 		
 		add(start, BorderLayout.CENTER);
 		
-		setSize(500,400); // size della finestra
+		setSize(400,200); // size della finestra
 		setLocationRelativeTo(null); // farla comparire al centro
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // l'applicazione si chiude quando premi la "X"
 		setVisible(true); // finestra visibile, da mettere alla fine dopo aver impostato la finestra

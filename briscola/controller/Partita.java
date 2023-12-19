@@ -32,6 +32,7 @@ public class Partita extends SwingWorker <Void, Void>{
 	private boolean isStoppable = false;
 	private Carte ultimaCartaGiocata = null;
 	private Mazzo mazzo;
+	private Carte briscola;
 
 	public Partita(String nome, String nome2,Tavolo game) {
 		this.gioco = game;
@@ -62,7 +63,7 @@ public class Partita extends SwingWorker <Void, Void>{
 		player1 = new Giocatore(nomePlayer1, mazzoPlayer1);
 		player2 = new Giocatore(nomePlayer2, mazzoPlayer2);
 		this.turnoPlayerAttuale = player1.getNome();
-		Carte briscola = mazzo.getListaCarte().getLast();
+		this.briscola = mazzo.getListaCarte().getLast();
 	
 		for (int i = 2; i <= 18; i++) {  // Aggiunta di questa riga
 			Carte carta1, carta2;
@@ -238,7 +239,7 @@ public class Partita extends SwingWorker <Void, Void>{
 	}
     
 	public Carte getBriscola(){
-		return this.mazzo.getListaCarte().getLast();
+		return this.briscola;
 	}
 
 	public Carte getcartasultavolo(){

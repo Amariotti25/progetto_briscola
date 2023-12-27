@@ -36,35 +36,45 @@ public class Carte {
             public String toString() {
                 return this.seme + " " + String.valueOf(numero);
             }
-        
-            public int compareTo(Carte carta, String seme, String briscola) {
-                // Controllo se la carta corrente e la carta avversaria sono della briscola
-                boolean isBriscolaCorrente = this.seme.equals(briscola);
-                boolean isBriscolaAvversaria = carta.seme.equals(briscola);
             
-                // Controllo se la carta corrente e la carta avversaria sono della stessa mossa
-                boolean isStessaMossaCorrente = this.seme.equals(seme);
-                boolean isStessaMossaAvversaria = carta.seme.equals(seme);
-            
-                // Comparazione in base alla briscola e alla mossa corrente
-                if (isBriscolaCorrente && !isBriscolaAvversaria) {
-                    return 1;
-                } else if (isStessaMossaCorrente && !isStessaMossaAvversaria) {
-                    return 1;
-                } else if (isBriscolaAvversaria && !isBriscolaCorrente) {
-                    return -1;
-                } else if (isStessaMossaAvversaria && !isStessaMossaCorrente) {
-                    return -1;
-                } else {
-                    // Se le carte non sono né della briscola né della stessa mossa, confronta i valori
-                    if (this.valore == carta.valore) {
-                        return Integer.compare(this.numero, carta.numero);
-                    } else {
-                        return Integer.compare(this.valore, carta.valore);
+            public Carte compareTo(Carte altraCarta, String briscola) {
+                if(this.seme.equals(briscola)&&!altraCarta.seme.equals(briscola)){
+                    System.out.println("prima carta lanciata briscola");
+                    return this;
+                }else if(!this.seme.equals(briscola)&&altraCarta.seme.equals(briscola)){
+                    System.out.println("seconda carta lanciata briscola");
+                    return altraCarta;
+                }else if(!this.seme.equals(altraCarta.seme)){
+                    System.out.println("semi diversi");
+                    return this;
+                }else{
+                    if(this.valore !=0 && altraCarta.valore != 0){
+                        System.out.println("this.valore !=0 && altraCarta.valore != 0");
+                        if(this.valore>altraCarta.valore){
+                            System.out.println("this.valore>altraCarta.valore");
+                            return this;
+                        }else{
+                            System.out.println("this.valore<altraCarta.valore");
+                            return altraCarta;
+                        }
+                    }else if(this.valore != 0 && altraCarta.valore == 0){
+                        System.out.println("(this.valore != 0 && altraCarta.valore == 0)");
+                        return this;
+                    }else if(this.valore == 0 && altraCarta.valore != 0){
+                        System.out.println("this.valore == 0 && altraCarta.valore != 0");
+                        return altraCarta;
+                    }else{
+                        if(this.numero > altraCarta.numero){
+                            System.out.println("this.numero > altraCarta.numero");
+                            return this;
+                        }else{
+                            System.out.println("this.numero < altraCarta.numero");
+                            return altraCarta;
+                        }
                     }
                 }
-            }            
-        
+            }
+
             public Giocatore getPlayer(){
                 return this.giocatore;
             }

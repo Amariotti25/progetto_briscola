@@ -10,14 +10,17 @@ import javax.imageio.ImageIO;
 
 public class JButtonConImmagine extends JButton {
 
-    private BufferedImage sfondo;
+    private BufferedImage sfondo; // Immagine di sfondo del JButton
 
+    // Costruttore vuoto
     public JButtonConImmagine(){
         
     }
     
+    // Costruttore con percorso immagine
     public JButtonConImmagine(String percorsoImmagine) {
         try {
+            // Carica l'immagine dal percorso specificato
             this.sfondo = ImageIO.read(new File(percorsoImmagine));
         } catch (IOException e) {
             e.printStackTrace();
@@ -26,6 +29,7 @@ public class JButtonConImmagine extends JButton {
     
     public void impostaImmagine(String percorsoImmagine) {
         try {
+            // Carica l'immagine dal percorso specificato
             this.sfondo = ImageIO.read(new File(percorsoImmagine));
             repaint(); // Ridisegna il componente per riflettere il cambio di immagine
         } catch (IOException e) {
@@ -33,6 +37,7 @@ public class JButtonConImmagine extends JButton {
         }
     }
 
+    // Override del metodo paintComponent per disegnare l'immagine come sfondo
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

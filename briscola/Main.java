@@ -1,8 +1,9 @@
-import view.SelezionaPartecipanti;
+import view.AvviaPartita;
 
 public class Main {
     public static void main(String[] args){
-        System.out.println("Benvenuto nel gioco");
-        new SelezionaPartecipanti();
+        //L'applicazione viene lanciata tramite la costruzione di 
+        //una classe AvviaPartita
+        new AvviaPartita();
     }
 }

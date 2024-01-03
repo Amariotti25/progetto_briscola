@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 import controller.Partita;
 
 public class Tavolo extends JPanel implements ActionListener {
+	// Dichiarazione delle variabili di istanza
 	private String giocatore1;
 	private String giocatore2;
 	private Partita game;
@@ -21,23 +22,27 @@ public class Tavolo extends JPanel implements ActionListener {
 	private JButtonConImmagine secondaCarta;
 	private JButtonConImmagine terzaCarta;
 	private JLabelConImmagine briscola;
-	private JLabelConImmagine cartasultavolo; //ultima carta giocata dai giocatori
+	private JLabelConImmagine cartasultavolo;	 //ultima carta giocata dai giocatori
 	private JLabelConImmagine cartacoperta1;
 	private JLabelConImmagine cartacoperta2;
 	private JLabelConImmagine cartacoperta3;
 	private JLabel timerGiocatore;
 	private JButton indietro;
 	private JLabel labelSelezione;
-	private JLabel punteggio1; //punteggio giocatore 1
-	private JLabel punteggio2; //punteggio giocatore 2
+	private JLabel punteggio1; 					//punteggio giocatore 1
+	private JLabel punteggio2; 					//punteggio giocatore 2
 	private JLabel turnoGiocatore;
 	
 
+	//Costruttore della classe Tavolo
 	public Tavolo(String nomeGiocatore, String nomeGiocatore2) {
+
+		// Impostazione del colore di sfondo del pannello
 		this.setBackground(Color.green.darker());
 		this.giocatore1 = nomeGiocatore;
 		this.giocatore2 = nomeGiocatore2;
 		
+		// Inizializzazione degli oggetti nel pannello
 		labelSelezione = new JLabel("Seleziona una carta");
 		primaCarta = new JButtonConImmagine();
 		secondaCarta = new JButtonConImmagine();
@@ -61,6 +66,7 @@ public class Tavolo extends JPanel implements ActionListener {
 
 		setLayout(null);
 		
+		// Impostazione dei layout e delle dimensioni degli oggetti nel pannello
 		cartacoperta1.setBounds(5,5,110,202);
 		cartacoperta2.setBounds(120,5,110,202);
 		cartacoperta3.setBounds(235,5,110,202);
@@ -76,6 +82,7 @@ public class Tavolo extends JPanel implements ActionListener {
 		punteggio2.setBounds(350, 315, 300, 50);
 		turnoGiocatore.setBounds(405, 500, 300, 50);
 
+		// Aggiunta dei componenti al pannello
 		add(labelSelezione);
 		add(primaCarta);
 		add(secondaCarta);
@@ -97,9 +104,11 @@ public class Tavolo extends JPanel implements ActionListener {
 		terzaCarta.addActionListener(this);
 		indietro.addActionListener(this);
 
+		 // Inizializzazione e avvio della partita
 		game = new Partita(giocatore1, giocatore2, this);
 		game.execute();
 
+		// Impostazione iniziale delle immagini e dei testi
 		SwingUtilities.invokeLater(() -> {
             primaCarta.impostaImmagine("../progetto_briscola/briscola/immagini/"+game.getCarteDisp().get(0).getSeme()
 																				+game.getCarteDisp().get(0).getNumero()+".jpg");
@@ -109,20 +118,25 @@ public class Tavolo extends JPanel implements ActionListener {
 																				+game.getCarteDisp().get(2).getNumero()+".jpg");
 			briscola.impostaImmagine("../progetto_briscola/briscola/immagini/"+game.getBriscola().getSeme()
 																			  +game.getBriscola().getNumero()+".jpg");
-			punteggio1.setText(giocatore1 + " punteggio = " + game.player1.getPunteggio());
-			punteggio2.setText(giocatore2 + " punteggio = " + game.player2.getPunteggio());
+			punteggio1.setText(giocatore1 + " punteggio = " + game.getGiocatore1().getPunteggio());
+			punteggio2.setText(giocatore2 + " punteggio = " + game.getGiocatore2().getPunteggio());
 			turnoGiocatore.setText("Turno di "+game.getTurnoGiocatore().getNome());
 		});
 	}
 
+	// Metodo chiamato alla fine della partita
 	public void notificaFineGioco() {
         JOptionPane.showMessageDialog(this, "Fine Partita!");
     }
 
+	//Gestione degli eventi
 	public void actionPerformed(ActionEvent e) {
+		// Ottenimento dell'oggetto che ha generato l'evento
         Object azione = e.getSource();
         JButton premuto = (JButton) azione;
+		// Gestione degli eventi in base al pulsante premuto
 		if (premuto == primaCarta) {
+			// Azioni quando il pulsante primaCarta viene premuto
 			game.setSceltaUtente(1);
 			labelSelezione.setVisible(false);
 			primaCarta.setVisible(false);
@@ -152,12 +166,12 @@ public class Tavolo extends JPanel implements ActionListener {
 				secondaCarta.impostaImmagine("../progetto_briscola/briscola/immagini/dorso.jpg");
 				terzaCarta.impostaImmagine("../progetto_briscola/briscola/immagini/dorso.jpg");
 			}
-			punteggio1.setText(giocatore1 + " punteggio = " + game.player1.getPunteggio());
-			punteggio2.setText(giocatore2 + " punteggio = " + game.player2.getPunteggio());
-			if(game.getcartasultavolo()!= null){
+			punteggio1.setText(giocatore1 + " punteggio = " + game.getGiocatore1().getPunteggio());
+			punteggio2.setText(giocatore2 + " punteggio = " + game.getGiocatore2().getPunteggio());
+			if(game.getCartaSulTavolo()!= null){
 				cartasultavolo.setVisible(true);
-				cartasultavolo.impostaImmagine("../progetto_briscola/briscola/immagini/"+game.getcartasultavolo().getSeme()
-																				+game.getcartasultavolo().getNumero()+".jpg");
+				cartasultavolo.impostaImmagine("../progetto_briscola/briscola/immagini/"+game.getCartaSulTavolo().getSeme()
+																				+game.getCartaSulTavolo().getNumero()+".jpg");
 			}else{
 				cartasultavolo.setVisible(false);
 			}
@@ -165,6 +179,7 @@ public class Tavolo extends JPanel implements ActionListener {
 			avviaTimer();
 
 		}else if (premuto == secondaCarta) {
+			// Azioni quando il pulsante secondaaCarta viene premuto
 			game.setSceltaUtente(2);
 			labelSelezione.setVisible(false);
             primaCarta.setVisible(false);
@@ -194,12 +209,12 @@ public class Tavolo extends JPanel implements ActionListener {
 				secondaCarta.impostaImmagine("../progetto_briscola/briscola/immagini/dorso.jpg");
 				terzaCarta.impostaImmagine("../progetto_briscola/briscola/immagini/dorso.jpg");
 			}
-			punteggio1.setText(giocatore1 + " punteggio = " + game.player1.getPunteggio());
-			punteggio2.setText(giocatore2 + " punteggio = " + game.player2.getPunteggio());
-			if(game.getcartasultavolo()!= null){
+			punteggio1.setText(giocatore1 + " punteggio = " + game.getGiocatore1().getPunteggio());
+			punteggio2.setText(giocatore2 + " punteggio = " + game.getGiocatore2().getPunteggio());
+			if(game.getCartaSulTavolo()!= null){
 				cartasultavolo.setVisible(true);
-				cartasultavolo.impostaImmagine("../progetto_briscola/briscola/immagini/"+game.getcartasultavolo().getSeme()
-																				+game.getcartasultavolo().getNumero()+".jpg");
+				cartasultavolo.impostaImmagine("../progetto_briscola/briscola/immagini/"+game.getCartaSulTavolo().getSeme()
+																				+game.getCartaSulTavolo().getNumero()+".jpg");
 			}else{
 				cartasultavolo.setVisible(false);
 			}
@@ -207,6 +222,7 @@ public class Tavolo extends JPanel implements ActionListener {
 			avviaTimer();
 
 		} else if (premuto == terzaCarta) {
+			// Azioni quando il pulsante terzaCarta viene premuto
 			game.setSceltaUtente(3);
 			labelSelezione.setVisible(false);
             primaCarta.setVisible(false);
@@ -236,12 +252,12 @@ public class Tavolo extends JPanel implements ActionListener {
 				secondaCarta.impostaImmagine("../progetto_briscola/briscola/immagini/dorso.jpg");
 				terzaCarta.impostaImmagine("../progetto_briscola/briscola/immagini/dorso.jpg");
 			}
-			punteggio1.setText(giocatore1 + " punteggio = " + game.player1.getPunteggio());
-			punteggio2.setText(giocatore2 + " punteggio = " + game.player2.getPunteggio());
-			if(game.getcartasultavolo()!= null){
+			punteggio1.setText(giocatore1 + " punteggio = " + game.getGiocatore1().getPunteggio());
+			punteggio2.setText(giocatore2 + " punteggio = " + game.getGiocatore2().getPunteggio());
+			if(game.getCartaSulTavolo()!= null){
 				cartasultavolo.setVisible(true);
-				cartasultavolo.impostaImmagine("../progetto_briscola/briscola/immagini/"+game.getcartasultavolo().getSeme()
-																				+game.getcartasultavolo().getNumero()+".jpg");
+				cartasultavolo.impostaImmagine("../progetto_briscola/briscola/immagini/"+game.getCartaSulTavolo().getSeme()
+																				+game.getCartaSulTavolo().getNumero()+".jpg");
 			}else{
 				cartasultavolo.setVisible(false);
 			}
@@ -249,31 +265,36 @@ public class Tavolo extends JPanel implements ActionListener {
 			avviaTimer();
 																			
 		} else if (premuto == indietro) {
+			// Chiusura della finestra corrente e avvio di una nuova "AvviaPartita"
 			SwingUtilities.getWindowAncestor(this).setVisible(false);
-			new SelezionaPartecipanti();
+			new AvviaPartita();
 		}
 	}
 
-public void avviaTimer() {
-    javax.swing.Timer timer = new javax.swing.Timer(1000, new ActionListener() {
-        private int count = 0;
+	// Metodo per avviare un timer
+	public void avviaTimer() {
+		javax.swing.Timer timer = new javax.swing.Timer(1000, new ActionListener() {
+			private int count = 5; // Impostazione del conto alla rovescia
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (count > 0) {
-                timerGiocatore.setText(Integer.toString(count));
-                count--;
-            } else {
-                ((javax.swing.Timer) e.getSource()).stop();
-                labelSelezione.setVisible(true);
-                primaCarta.setVisible(true);
-                secondaCarta.setVisible(true);
-                terzaCarta.setVisible(true);
-                timerGiocatore.setVisible(false);
-            }
-        }
-    });
-	timerGiocatore.setText("5");
-    timer.start();
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (count > 0) {
+					// Aggiornamento del testo del timer
+					timerGiocatore.setText(Integer.toString(count));
+					count--;
+				} else {
+					// Arresto del timer e ripristino dei pulsanti e dell'etichetta
+					((javax.swing.Timer) e.getSource()).stop();
+					labelSelezione.setVisible(true);
+					primaCarta.setVisible(true);
+					secondaCarta.setVisible(true);
+					terzaCarta.setVisible(true);
+					timerGiocatore.setVisible(false);
+				}
+			}
+		});
+		// Inizializzazione del testo del timer e avvio
+		timerGiocatore.setText("5");
+		timer.start();
 	}
-}
+} 

@@ -1,14 +1,17 @@
 package model;
 
 public class Carte {
-    private int numero;
-	private int valore;
-	private String seme;
-	private Giocatore giocatore; 
+    private int numero;             // Numero della carta
+	private int valore;             // Valore della carta
+	private String seme;            // Seme della carta
 
+    // Costruttore della classe Carte
     public Carte(int numero, String seme) { 
+        // Inizializzazione dei valori della carta
 		this.numero = numero;
 		this.seme = seme;
+
+        // Calcolo del valore della carta in base al numero e al seme
 		if(numero <= 7 && numero != 1 && numero != 3)
 			this.valore = 0;
 		else {
@@ -24,69 +27,54 @@ public class Carte {
 				case 8: this.valore = 2;
 						break;
 				default:
-						System.out.println("valore 0");
 						break;
                     }
-                }
-                this.giocatore = null;
-            }
-            public int getValore() {
-                return this.valore;
-            }
-            public String toString() {
-                return this.seme + " " + String.valueOf(numero);
-            }
-            
-            public Carte compareTo(Carte altraCarta, String briscola) {
-                if(this.seme.equals(briscola)&&!altraCarta.seme.equals(briscola)){
-                    System.out.println("prima carta lanciata briscola");
-                    return this;
-                }else if(!this.seme.equals(briscola)&&altraCarta.seme.equals(briscola)){
-                    System.out.println("seconda carta lanciata briscola");
-                    return altraCarta;
-                }else if(!this.seme.equals(altraCarta.seme)){
-                    System.out.println("semi diversi");
+             }
+    }
+
+    // Metodo per ottenere il valore della carta
+    public int getValore() {
+        return this.valore;
+    }
+
+    // Metodo per ottenere il seme della carta
+    public String getSeme(){
+        return this.seme;
+    }
+
+    // Metodo per ottenere il numero della carta
+    public int getNumero(){
+        return this.numero;
+    }
+    
+    // Metodo per confrontare due carte in base alle regole del gioco
+    public Carte compareTo(Carte altraCarta, String briscola) {
+        if(this.seme.equals(briscola)&&!altraCarta.seme.equals(briscola)){
+            return this;
+        }else if(!this.seme.equals(briscola)&&altraCarta.seme.equals(briscola)){
+            return altraCarta;
+        }else if(!this.seme.equals(altraCarta.seme)){
+            return this;
+        }else{
+            if(this.valore !=0 && altraCarta.valore != 0){
+                if(this.valore>altraCarta.valore){
                     return this;
                 }else{
-                    if(this.valore !=0 && altraCarta.valore != 0){
-                        System.out.println("this.valore !=0 && altraCarta.valore != 0");
-                        if(this.valore>altraCarta.valore){
-                            System.out.println("this.valore>altraCarta.valore");
-                            return this;
-                        }else{
-                            System.out.println("this.valore<altraCarta.valore");
-                            return altraCarta;
-                        }
-                    }else if(this.valore != 0 && altraCarta.valore == 0){
-                        System.out.println("(this.valore != 0 && altraCarta.valore == 0)");
-                        return this;
-                    }else if(this.valore == 0 && altraCarta.valore != 0){
-                        System.out.println("this.valore == 0 && altraCarta.valore != 0");
-                        return altraCarta;
-                    }else{
-                        if(this.numero > altraCarta.numero){
-                            System.out.println("this.numero > altraCarta.numero");
-                            return this;
-                        }else{
-                            System.out.println("this.numero < altraCarta.numero");
-                            return altraCarta;
-                        }
-                    }
+                    return altraCarta;
+                }
+            }else if(this.valore != 0 && altraCarta.valore == 0){
+                return this;
+            }else if(this.valore == 0 && altraCarta.valore != 0){
+                return altraCarta;
+            }else{
+                if(this.numero > altraCarta.numero){
+                    return this;
+                }else{
+                    return altraCarta;
                 }
             }
-
-            public Giocatore getPlayer(){
-                return this.giocatore;
-            }
-        
-            public String getSeme(){
-                return this.seme;
-            }
-
-            public int getNumero(){
-                return this.numero;
-            }
-        
         }
+    }
+}
         
 
